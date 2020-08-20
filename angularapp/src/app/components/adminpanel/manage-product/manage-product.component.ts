@@ -1,22 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from 'src/app/service/http.service';
 import { ProductService, Product } from 'src/app/service/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { DisposeBag } from '@ronas-it/dispose-bag';
 
 @Component({
   selector: 'app-manage-product',
   templateUrl: './manage-product.component.html',
   styleUrls: ['./manage-product.component.scss']
 })
-export class ManageProductComponent implements OnInit {
+export class ManageProductComponent implements OnInit, OnDestroy {
 
-  productForm:FormGroup;
+  id:string;
   message = '  '
   file:File = null;
-  id:string;
   env = environment;
+  productForm:FormGroup;
+  dispBag = new DisposeBag();
 
   constructor(
     private fBuilder:FormBuilder,
@@ -46,18 +48,24 @@ export class ManageProductComponent implements OnInit {
     )
   }
 
+  ngOnDestroy(): void {
+		this.dispBag.unsubscribe()
+	}
+
   newProduct(){
     this.message = null;
     if(this.file){
       let formdata = new FormData()
       formdata.append('file',this.file,this.file.name)
       formdata.append('body',JSON.stringify(this.productForm.value))
-      this.http.postProduct(formdata).subscribe(
-        (product:Product)=>{
-          this.message="product uploaded to DB"
-          this.productService.putProduct(product)
-        },
-        err=>err=>this.message = err.error.message
+      this.dispBag.add(
+        this.http.postProduct(formdata).subscribe(
+          (product:Product)=>{
+            this.message="product uploaded to DB"
+            this.productService.putProduct(product)
+          },
+          err=>this.message = err.error.message
+        )
       )
     } else {
       this.message = "Please select a Imgae !"
@@ -66,12 +74,14 @@ export class ManageProductComponent implements OnInit {
 
   updateProduct(){
     this.message = null
-    this.http.updateProduct(this.productForm.value,this.id).subscribe(
-      (product:Product)=>{
-        this.message="Product updated !"
-        this.productService.patchedProduct(product)
-      },
-      err=>this.message = err.error.message
+    this.dispBag.add(
+      this.http.updateProduct(this.productForm.value,this.id).subscribe(
+        (product:Product)=>{
+          this.message="Product updated !"
+          this.productService.patchedProduct(product)
+        },
+        err=>this.message = err.error.message
+      )
     )
   }
 

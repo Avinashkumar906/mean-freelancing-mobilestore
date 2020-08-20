@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm, FormGroup, Validators, FormControl } from '@angular/forms';
 import { FormBuilder } from '@angular/forms'
 import { UserService, User } from 'src/app/service/user.service';
 import { HttpService } from 'src/app/service/http.service';
+import { DisposeBag } from '@ronas-it/dispose-bag';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   loginForm:FormGroup;
   message:string = '  ';
+  dispBag = new DisposeBag();
+  
   constructor(
     private fBuilder:FormBuilder,
     private http:HttpService,
@@ -27,15 +30,21 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngOnDestroy(): void {
+		this.dispBag.unsubscribe()
+  }
+  
   submit(){
     this.message = null;
-    this.http.signIn(this.loginForm.value).subscribe(
-      (user:User)=> {
-        this.userService.login(user)
-        this.message = `Welcome ${user.name} !`
-        this.loginForm.reset();
-      },
-      err => this.message = err.error.message
+    this.dispBag.add(
+      this.http.signIn(this.loginForm.value).subscribe(
+        (user:User)=> {
+          this.userService.login(user)
+          this.message = `Welcome ${user.name} !`
+          this.loginForm.reset();
+        },
+        err => this.message = err.error.message
+      )
     )
   }
 

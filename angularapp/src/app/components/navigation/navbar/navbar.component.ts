@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User, UserService } from 'src/app/service/user.service';
 import { OrderService } from 'src/app/service/order.service';
+import { DisposeBag } from '@ronas-it/dispose-bag';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
   user:User = this.userService.getUser()
+  dispBag = new DisposeBag();
 
   constructor(
     private userService:UserService,
@@ -17,11 +19,17 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.userService.userChanged.subscribe(
-      (user:User)=>this.user=user,
+    this.dispBag.add(
+      this.userService.userChanged.subscribe(
+        (user:User)=>this.user=user,
+      )
     )
   }
 
+  ngOnDestroy(): void {
+		this.dispBag.unsubscribe()
+  }
+  
   logout(){
     this.userService.logout()
   }
@@ -29,7 +37,4 @@ export class NavbarComponent implements OnInit {
   getCount(){
     return this.orderService.getCount()
   }
-  // isLogged(){
-  //   return this.userService.
-  // }
 }

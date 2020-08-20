@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-//Mongodb schema for user collection 
+//Mongodb schema for product collection 
 const productSchema = new Schema({
     name:String,
     cost:Number,

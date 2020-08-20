@@ -18,7 +18,8 @@ import { OrderdetailComponent } from './components/main/orderdetail/orderdetail.
 
 
 const routes: Routes = [
-  {path:'',component:WelcomeComponent},
+  {path:'', redirectTo: '/home', pathMatch: 'full'},
+  {path:'home',component:WelcomeComponent},
   {path:'signin',component:LoginComponent},
   {path:'signup',component:RegisterComponent},
   {path:'phone',component:ProductlistComponent},
@@ -36,6 +37,7 @@ const routes: Routes = [
   },
   {path:'about',component:AboutComponent},
   {path:'contact',component:ContactComponent},
+  {path:'**', redirectTo: '/home'},
 ];
 
 @NgModule({

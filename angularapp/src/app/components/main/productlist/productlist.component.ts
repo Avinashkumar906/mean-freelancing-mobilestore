@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProductService, Product } from 'src/app/service/product.service';
 import * as _ from 'lodash'
 import { environment } from 'src/environments/environment';
 import { OrderService } from 'src/app/service/order.service';
 import { Router } from '@angular/router';
+import { DisposeBag } from '@ronas-it/dispose-bag';
 
 @Component({
   selector: 'app-productlist',
   templateUrl: './productlist.component.html',
   styleUrls: ['./productlist.component.scss']
 })
-export class ProductlistComponent implements OnInit {
+export class ProductlistComponent implements OnInit, OnDestroy {
 
   constructor(
     private productService:ProductService,
@@ -18,15 +19,22 @@ export class ProductlistComponent implements OnInit {
     private router:Router,
     ) { }
     
-  productList:Array<Product> = this.productService.getProducts();
-  env = environment;
-  key:string = '';
+    key:string = '';
+    env = environment;
+    dispBag = new DisposeBag();
+    productList:Array<Product> = this.productService.getProducts();
 
   ngOnInit(): void {
-    this.productService.productsChanged.subscribe(
-      (products:Array<Product>)=>this.productList = _.cloneDeep(products)
+    this.dispBag.add(
+      this.productService.productsChanged.subscribe(
+        (products:Array<Product>)=>this.productList = _.cloneDeep(products)
+      )
     )
   }
+
+  ngOnDestroy(): void {
+		this.dispBag.unsubscribe()
+	}
 
   buyNow(product:Product){
     let dummy = _.cloneDeep(product)

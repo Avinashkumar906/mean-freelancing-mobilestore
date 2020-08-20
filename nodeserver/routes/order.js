@@ -12,7 +12,4 @@ router.post('/order',orderController.addOrder)
 router.delete('/order',orderController.deleteOrder)
 router.patch('/order',orderController.completeOrder)
 
-// router.route('/myorders')
-//     .get(orderController.getOrdersByMail)
-
 module.exports = router;

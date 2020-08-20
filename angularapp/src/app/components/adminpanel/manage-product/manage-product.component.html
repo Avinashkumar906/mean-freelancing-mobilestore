@@ -59,7 +59,7 @@
                 <h5 class="h5 my-2 text-center">
                     {{message}}
                 </h5>
-                <button type="submit" class="btn btn-primary mx-1" [disabled]="productForm.invalid">Submit</button>
+                <button type="submit" class="btn btn-primary mx-1" [disabled]="productForm.invalid">{{ id ? 'Update Product' : 'New Product'}}</button>
                 <button type="button" class="btn btn-danger mx-1" (click)="reset()">Reset</button>
             </div>
             <ng-template #spinner>

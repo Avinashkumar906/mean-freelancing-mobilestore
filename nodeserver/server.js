@@ -5,7 +5,9 @@ const env = require('dotenv')
 const bcrypt = require('bcryptjs')
 
 //Setting enviroment variables comment below for server deployment
-env.config();
+if(!process.env.PORT || !process.env.MONGO_URL){
+    env.config();
+}
 
 //Mongodb setup
 mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true,useUnifiedTopology: true})
