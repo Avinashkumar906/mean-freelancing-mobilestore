@@ -1,0 +1,71 @@
+<div class="d-block mx-auto py-2">
+    <form [formGroup]="productForm" (ngSubmit)="productForm.valid && submit()" class="d-block m-auto py-4" style="max-width: 720px;">
+        <h2 class="h2 text-center mb-3">{{ id ? "Update Product" : "Add Product"}}</h2>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" class="form-control" formControlName="name" placeholder="Product Name" >
+                    <small *ngIf="productFormControl.name.invalid && (productFormControl.name.touched && productFormControl.name.dirty)" class="form-text text-muted">Name must be 4 character long !</small>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" class="form-control" formControlName="company" placeholder="Company Name" >
+                    <small *ngIf="productFormControl.company.invalid && (productFormControl.company.touched && productFormControl.company.dirty)" class="form-text text-muted">Required !</small>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Price</label>
+                    <input type="number" class="form-control" formControlName="cost" placeholder="Product Price" >
+                    <small *ngIf="productFormControl.cost.invalid && (productFormControl.cost.touched && productFormControl.cost.dirty)" class="form-text text-muted">Required !</small>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Quantity</label>
+                    <input type="number" class="form-control" formControlName="quantity" placeholder="Quantity of Product" >
+                    <small *ngIf="productFormControl.quantity.invalid && (productFormControl.quantity.touched && productFormControl.quantity.dirty)" class="form-text text-muted">Required !</small>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Seller Name</label>
+                    <input type="text" class="form-control" formControlName="seller" placeholder="Seller name" >
+                    <small *ngIf="productFormControl.seller.invalid && (productFormControl.seller.touched && productFormControl.seller.dirty)" class="form-text text-muted">Required !</small>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Description</label>
+                    <input type="text" class="form-control" formControlName="description" placeholder="Description" >
+                    <small *ngIf="productFormControl.description.invalid && (productFormControl.description.touched && productFormControl.description.dirty)" class="form-text text-muted">Name must be 4 character long !</small>
+                </div>
+            </div>
+            <div *ngIf="id" class="col-12 text-center" >
+                <img class="d-block mx-auto" style="max-height: 300px;" [src]='env.api + productForm.value.image'>
+            </div>
+            <div *ngIf="!id" class="col-sm-12">
+                <div class="form-group">
+                    <label>Add Image</label>
+                    <input type="file" (change)="handleFile($event)" class="form-control-file" placeholder="Product Name" >
+                </div>
+            </div>
+        </div>
+        <div class="text-center w-100">
+            <div *ngIf="message;else spinner">
+                <h5 class="h5 my-2 text-center">
+                    {{message}}
+                </h5>
+                <button type="submit" class="btn btn-primary mx-1" [disabled]="productForm.invalid">Submit</button>
+                <button type="button" class="btn btn-danger mx-1" (click)="reset()">Reset</button>
+            </div>
+            <ng-template #spinner>
+                Please wait...
+            </ng-template>
+        </div>
+    </form>
+
+</div>

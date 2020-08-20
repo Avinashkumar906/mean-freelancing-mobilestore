@@ -1,0 +1,32 @@
+<div *ngIf="!error;else noProduct">
+    <div class="container py-4">
+        <div class="row align-item-center">
+            <div class="col-sm-5">
+                <div style="overflow: hidden;">
+                    <img [src]='env.api + product.image' class="d-block mx-auto" height="300px">
+                </div>
+                <p class="px-2 py-1 my-0 text-center">
+                    <span class="btn btn-primary m-1" (click)="buyNow(product)"> Buy Now </span>
+                    <span class="btn btn-primary m-1" (click)="addToOrder(product)"> Add to Cart</span>
+                </p>
+                <h3 class="h3 my-1 text-center">{{product.name}}</h3>
+                <h4 class="h4 text-center">{{product.cost}}/- &euro;</h4>
+                <small class="d-block text-center text-muted" *ngIf="product.quantity >20 ">*Available in stock*</small>
+                <small class="d-block text-center text-muted" *ngIf="product.quantity <= 20 ">{{product.quantity <= 0 ? 'Out of stock!' : "Hurry " + product.quantity + " Left only !"}}</small>
+                <p class="px-2 py-0 my-0 text-center"><strong>Brand :</strong> {{product.company}}</p>
+                <p class="px-2 py-0 my-0 text-center"><strong>Seller :</strong> {{product.seller}}</p>
+            </div>
+            <div class="col-sm-7 h-100">
+                <div class="py-4">
+                    <h3 class="h3">Description</h3>
+                    {{product.description}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #noProduct>
+    <div class="my-4 text-center">
+        <h1 class="text-center"> No product found!</h1>
+    </div>
+</ng-template>

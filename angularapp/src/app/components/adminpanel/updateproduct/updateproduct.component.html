@@ -1,0 +1,26 @@
+<div class="container-fluid">
+    <table class="table mx-auto p-0" style="max-width: 980px;">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Update</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let product of productList;let i = index">
+                <th scope="row">{{i+1}}</th>
+                <td>{{product.name}}</td>
+                <td>{{product.company}}</td>
+                <td>{{product.quantity}}</td>
+                <td>{{product.cost}}</td>
+                <td><span class="btn btn-sm btn-danger" [routerLink]="['/admin','product']" [queryParams]="{_id:product._id}">Update</span></td>
+                <td><span class="btn btn-sm btn-danger" (click)="delete(product)">Delete</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

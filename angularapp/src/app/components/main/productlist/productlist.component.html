@@ -1,0 +1,24 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group my-2 w-auto" style="max-width: 400px;">
+                <input type="text" class="form-control" placeholder="Search phones here !" [(ngModel)]="key">
+            </div>
+        </div>
+        <h2 class="col-12">All products</h2>
+        <hr/>
+        <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let item of productList | searchProduct:key;let i = index">
+            <div class="card my-2 d-block mx-auto" style="width: 18rem;">
+                <div class="px-3 pt-3" style="height: 200px;">
+                    <img [src]='env.api+item.image' class="card-img-top w-auto d-block mx-auto" height="100%" >
+                </div>
+                <div class="card-body text-center">
+                  <h5 class="h5 card-title">{{item.name}}</h5>
+                  <h6 class="h6 card-text">{{item.cost}} &euro;</h6>
+                  <a class="btn btn-primary m-1" (click)="buyNow(item)">Buy now</a>
+                  <a class="btn btn-primary m-1" [routerLink]="['/phone','detail',item._id]">View</a>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
