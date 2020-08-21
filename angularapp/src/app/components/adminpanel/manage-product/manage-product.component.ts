@@ -5,6 +5,7 @@ import { ProductService, Product } from 'src/app/service/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { DisposeBag } from '@ronas-it/dispose-bag';
+import { OrderService } from 'src/app/service/order.service';
 
 @Component({
   selector: 'app-manage-product',
@@ -24,7 +25,8 @@ export class ManageProductComponent implements OnInit, OnDestroy {
     private fBuilder:FormBuilder,
     private http:HttpService,
     private productService:ProductService,
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private orderService : OrderService
   ) { 
     this.productForm = this.fBuilder.group({
       name:['',[Validators.required,Validators.minLength(4)]],
@@ -62,6 +64,7 @@ export class ManageProductComponent implements OnInit, OnDestroy {
         this.http.postProduct(formdata).subscribe(
           (product:Product)=>{
             this.message="product uploaded to DB"
+            this.orderService.clearCart()
             this.productService.putProduct(product)
           },
           err=>this.message = err.error.message
@@ -78,6 +81,7 @@ export class ManageProductComponent implements OnInit, OnDestroy {
       this.http.updateProduct(this.productForm.value,this.id).subscribe(
         (product:Product)=>{
           this.message="Product updated !"
+          this.orderService.clearCart()
           this.productService.patchedProduct(product)
         },
         err=>this.message = err.error.message

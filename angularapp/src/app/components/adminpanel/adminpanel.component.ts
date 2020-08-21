@@ -36,7 +36,6 @@ export class AdminpanelComponent implements OnInit, OnDestroy {
 
   checkUser(){
     if(this.user && this.user.role === 'admin'){
-      this.orderService.clearCart()
     } else {
       this.router.navigate(['/home'])
     }

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Product, ProductService } from 'src/app/service/product.service';
 import { HttpService } from 'src/app/service/http.service';
 import { DisposeBag } from '@ronas-it/dispose-bag';
+import { OrderService } from 'src/app/service/order.service';
 
 @Component({
   selector: 'app-updateproduct',
@@ -14,7 +15,8 @@ export class UpdateproductComponent implements OnInit, OnDestroy {
   
   constructor(
     private productService:ProductService,
-    private httpService:HttpService
+    private httpService:HttpService,
+    private orderService:OrderService
   ) { }
 
   productList:Array<Product> = this.productService.getProducts();
@@ -36,6 +38,7 @@ export class UpdateproductComponent implements OnInit, OnDestroy {
       this.dispBag.add(
         this.httpService.deleteProduct(product).subscribe(
           (data:Product)=>{
+            this.orderService.clearCart()
             this.productService.removeProduct(data)
           }
         )
